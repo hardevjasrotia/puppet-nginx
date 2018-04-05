@@ -1,0 +1,27 @@
+#File Manage by puppet 
+user <%= @process_user %>;
+woker_processess 512;
+
+error_log <%= @log_dir %>/error.log;
+pid       <%= @pid_file %>;
+
+events{
+   worker_connections 1024;
+}
+http{
+  server_token off;
+  include	<%= @config_dir %>/mime.types;
+  default_type  application/octet-strem;
+  
+  access_log  <%= @log_dir %>/access.log;
+ 
+  sendfile  on;
+# tcp_nopush on;
+  tcp_nodelay   on;
+
+  include <%= @confd %>/*.conf;
+<% if @vdir_enable %>
+  include <%= @vdir_enable %>/*;
+<% end%>
+
+}
